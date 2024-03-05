@@ -9,6 +9,6 @@ const options = {
 
 //const socket = io('/', options);
 //const socket = io.connect("localhost:4444", options);
-const socket = io.connect("https://servicerobot.pro:4444", options);
+const socket = io.connect("https://serbot.online:4444", options);
 
 export default socket;

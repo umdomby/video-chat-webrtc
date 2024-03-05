@@ -1,5 +1,10 @@
 import {useParams} from 'react-router';
 import useWebRTC, {LOCAL_VIDEO} from '../../hooks/useWebRTC';
+// import {useState} from "react";
+// import microphonestop from '../../Icons/microphone-stop.svg'
+// import microphone from '../../Icons/microphone.svg'
+// import camera from '../../Icons/camera.svg'
+// import camerastop from '../../Icons/camera-stop.svg'
 
 function layout(clientsNumber = 1) {
   const pairs = Array.from({length: clientsNumber})
@@ -31,9 +36,48 @@ function layout(clientsNumber = 1) {
 }
 
 export default function Room() {
-  const {id: roomID} = useParams();
-  const {clients, provideMediaRef} = useWebRTC(roomID);
-  const videoLayout = layout(clients.length);
+    const {id: roomID} = useParams();
+    const {clients, provideMediaRef} = useWebRTC(roomID);
+    const videoLayout = layout(clients.length);
+
+    // const [audioMuted, setAudioMuted] = useState(false)
+    // const [videoMuted, setVideoMuted] = useState(false)
+    //
+    // let audioControl;
+    // if(audioMuted){
+    //     audioControl=<span className="iconContainer" onClick={()=>toggleMuteAudio()}>
+    //   <img src={microphonestop} alt="Unmute audio"/>
+    // </span>
+    // } else {
+    //     audioControl=<span className="iconContainer" onClick={()=>toggleMuteAudio()}>
+    //   <img src={microphone} alt="Mute audio"/>
+    // </span>
+    // }
+    //
+    // let videoControl;
+    // if(videoMuted){
+    //     videoControl=<span className="iconContainer" onClick={()=>toggleMuteVideo()}>
+    //   <img src={camerastop} alt="Resume video"/>
+    // </span>
+    // } else {
+    //     videoControl=<span className="iconContainer" onClick={()=>toggleMuteVideo()}>
+    //   <img src={camera} alt="Stop audio"/>
+    // </span>
+    // }
+
+    // function toggleMuteAudio(){
+    //     if(stream){
+    //         setAudioMuted(!audioMuted)
+    //         stream.getAudioTracks()[0].enabled = audioMuted
+    //     }
+    // }
+    // function toggleMuteVideo(){
+    //     if(stream){
+    //         setVideoMuted(!videoMuted)
+    //         stream.getVideoTracks()[0].enabled = videoMuted
+    //     }
+    // }
+
 
   return (
     <div style={{
@@ -56,9 +100,16 @@ export default function Room() {
               playsInline
               muted={clientID === LOCAL_VIDEO}
             />
+              {/*<div className="callContainer">*/}
+              {/*    <div className="controlsContainer flex">*/}
+              {/*      {audioControl}*/}
+              {/*      {videoControl}*/}
+              {/*    </div>*/}
+              {/*</div>*/}
           </div>
         );
       })}
+
     </div>
   );
 }

@@ -21,16 +21,16 @@ export default function Main() {
   return (
     <div ref={rootNode}>
       <h1>Available Rooms</h1>
-      {/*<ul>*/}
-      {/*  {rooms.map(roomID => (*/}
-      {/*    <li key={roomID}>*/}
-      {/*      {roomID}*/}
-      {/*      <button onClick={() => {*/}
-      {/*        history.push(`/${roomID}`);*/}
-      {/*      }}>JOIN ROOM</button>*/}
-      {/*    </li>*/}
-      {/*  ))}*/}
-      {/*</ul>*/}
+      <ul>
+        {rooms.map(roomID => (
+          <li key={roomID}>
+            {roomID}
+            <button onClick={() => {
+              history.push(`/${roomID}`);
+            }}>JOIN ROOM</button>
+          </li>
+        ))}
+      </ul>
         <div>
             <input type="text" value={myRoomId} onChange={e => setMyRoomId(e.target.value)} />
             <button onClick={() => {

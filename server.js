@@ -1,16 +1,11 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-//const server = require('http').createServer(app);
-//const io = require('socket.io')(server);
-//const {version, validate} = require('uuid');
-
 const ACTIONS = require('./src/socket/actions');
-//const PORT = process.env.PORT || 3001;
 const fs = require("fs");
-const privateKey = fs.readFileSync(path.resolve(__dirname,'./cert/servicerobotpro/privkey.pem'));
-const certificate = fs.readFileSync(path.resolve(__dirname,'./cert/servicerobotpro/cert.pem'));
-const ca = fs.readFileSync(path.resolve(__dirname,'./cert/servicerobotpro/chain.pem'));
+const privateKey = fs.readFileSync(path.resolve(__dirname, './cert/serbotonline/privkey.pem'));
+const certificate = fs.readFileSync(path.resolve(__dirname, './cert/serbotonline/cert.pem'));
+const ca = fs.readFileSync(path.resolve(__dirname, './cert/serbotonline/chain.pem'));
 const credentials = {
   key: privateKey,
   cert: certificate,
@@ -24,15 +19,13 @@ function getClientRooms() {
   const {rooms} = io.sockets.adapter;
 
   return Array.from(rooms.keys())
-      //.filter(roomID => validate(roomID) && version(roomID) === 4);
+      .filter(roomID => roomID.length < 8);
 }
-
 function shareRoomsInfo() {
   io.emit(ACTIONS.SHARE_ROOMS, {
     rooms: getClientRooms()
   })
 }
-
 io.on('connection', socket => {
   shareRoomsInfo();
 
@@ -67,7 +60,7 @@ io.on('connection', socket => {
 
     Array.from(rooms)
       // LEAVE ONLY CLIENT CREATED ROOM
-      //.filter(roomID => validate(roomID) && version(roomID) === 4)
+      .filter(roomID => roomID.length < 8)
       .forEach(roomID => {
 
         const clients = Array.from(io.sockets.adapter.rooms.get(roomID) || []);
@@ -108,12 +101,14 @@ io.on('connection', socket => {
 
 });
 
-// app.use(express.static('./client/build'));
-//
-// app.get('*', (req,res)=>{
-//     res.sendFile(path.resolve(__dirname, "client","build","index.html"));
-// })
+const publicPath = path.join(__dirname, 'build');
+app.use(express.static(publicPath));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
 
-httpsServer.listen(4444, () => {
-  console.log('HTTPS Server running on port 4444');
+require('dotenv').config()
+const port = process.env.SERVER_PORT_HTTPS || 4444
+httpsServer.listen(port, () => {
+  console.log(`HTTPS Server running on port ${port}`);
 });
